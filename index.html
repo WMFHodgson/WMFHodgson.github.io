@@ -1,1 +1,122 @@
-<h1>Petrovia Militos</h1>
+<div class="page">
+  <div class="names">
+    <div class="left-half">
+      <h1 id="firstName"></h1>
+    </div>
+    <div class="right-half">
+      <h1 id="lastName"></h1>
+    </div>
+  </div>
+
+  <div class="form">
+    <input type="button" id="nameFetcher" value="T" onclick="setNames()">
+  </div>
+</div>
+
+
+<style media="screen">
+  h1 {
+    font-size: 90px;
+    color: white;
+  }
+  body {
+    background-color: #d6cbd3;
+  }
+
+  #firstName {
+    padding-right: 0px;
+  }
+
+  #lastName {
+    padding-left: 35px;
+  }
+
+  #nameFetcher {
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+    border: 1px solid #ada397;
+    background-color: #bdcebe;
+    color: #ada397;
+    font-size: 40px;
+  }
+
+  #nameFetcher:hover {
+    cursor: pointer;
+  }
+
+  #nameFetcher:active {
+    color: white;
+  }
+
+  .page {
+    display: inline-block;
+    width: 100%;
+  }
+
+  .names {
+    height: 250px;
+  }
+
+  .form {
+    text-align: center;
+  }
+
+  .left-half {
+    display: inline-block;
+    width: 49%;
+    text-align: right;
+  }
+
+  .right-half {
+    display: inline-block;
+    width: 49%;
+  }
+</style>
+
+<script>
+  var firstName = document.getElementById("firstName");
+  var lastName = document.getElementById("lastName");
+  var firstNameList = [];
+  var lastNameList = [];
+
+  fetch('https://sheets.googleapis.com/v4/spreadsheets/1xsCEyRiGCP-YsDw_DMYnIsT5V7ANHQ0tRTyU89LY4tI/values/A:B?key=AIzaSyC2ftFIhrPR3haItHTNJm2KKTnRKQkObHQ', {
+         method: 'GET',
+         headers: {},
+       })
+       .then(response => response.json())
+       .then(data => {
+         data.values.forEach((element) => {
+           firstNameList.push(element[0]);
+           if (element[1] != undefined) {
+             lastNameList.push(element[1]);
+           }
+         })
+       });
+
+  document.getElementById("nameFetcher").animate([
+      { transform: 'rotate(0) translate3D(-0%, -0%, 0' },
+      { transform: 'rotate(360deg) translate3D(-0%, -0%, 0)' }
+    ], {
+      duration: 2500,
+      iterations: Infinity
+    });
+
+  function setNames() {
+    firstName.innerHTML = firstNameList[Math.floor(Math.random() * firstNameList.length)];
+    lastName.innerHTML = lastNameList[Math.floor(Math.random() * lastNameList.length)];
+
+    firstName.animate([
+      {transform: 'translate3D(-500px, 0, 0)'},
+      {transform: 'translate3D(0, 0, 0)'}
+    ], {
+      duration: 400
+    })
+    lastName.animate([
+      {transform: 'translate3D(500px, 0, 0)'},
+      {transform: 'translate3D(0, 0, 0)'}
+    ], {
+      duration: 400
+    })
+  }
+</script>
